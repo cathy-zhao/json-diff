@@ -13,6 +13,7 @@ import cssnano from 'cssnano';
 export default {
     entry : 'src/main.js',
     format : 'umd',
+    moduleName: 'configLogs',   //  cyn add + umd或iife模式下，若入口文件含 export，必须加上该属性  babelrc最好配上module false
     dest : 'dist/bundle.min.js',
     sourceMap : true,
     plugins : [
