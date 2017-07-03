@@ -5,6 +5,13 @@
 - 有服务端接口提供
 - Author: （陈雨浓）100013
 - 数组对象支持性 比对流程还有待完善
+## 效果
+- 查看历史日志
+![avatar](showlogs.png)
+- 查看差异
+![avatar](showdiff.png)
+- 保存日志
+![avatar](savelog.png)
 ## 演示代码
 ```js
 var configLogs = new configLogs();

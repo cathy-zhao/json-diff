@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 
 <head>
@@ -22,6 +22,7 @@
       var del = configLogs.showDiff({
           a: 123,
           b: 344,
+          c: 'woshiC',
           arr: [
               '11', '2'
           ],
@@ -31,9 +32,10 @@
       }, {
           a: 123,
           b: 344,
+	  c: 'wo shiD',
           date: new Date('2010-08-08'),
           arr: [
-              '11', '2'
+              '11', '2','4'
           ],
           arrlist: [
               {
@@ -46,9 +48,11 @@
       }, {
           'a': 'a的字典',
           'b': 'b的字典',
+	   'c': 'c的字典',
+	 'd': 'd的字典',
           arrlist: '任务列表',
           date: '时间'
-      },false);
+      },true);
 
       return del
     }
