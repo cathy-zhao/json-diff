@@ -112,12 +112,13 @@ export default class ConfigLogs {
 
     /**
 * 显示日志  分页 在修改比对按钮旁边加一个查看修改日志按钮，点击触发
+* @param  {[type]} domain     域名
 * @param  {[type]} configAppID     配置应用的ID
 * @param  {[type]} configID        配置ID
 * @param  {[type]} mappingObj 配置表单域的名称的字典
 * @return {[type]}                 [description]
 */
-    showLogs(configAppID, configID, mappingObj) {
+    showLogs(domain,configAppID, configID, mappingObj) {
         swal({title: "日志对比：", text: "<div id='table-list' style='max-height: 650px; overflow: auto;'></div>", html: true})
         var htmls = `<table id='js-table-data'  style="margin: 10px auto;"  border="1" cellspacing="0" cellpadding="0" width="100%" > </table >
          <table width='60%' align='center'>
@@ -131,7 +132,7 @@ export default class ConfigLogs {
 
         window.Page = function(pno, pageSize) {
             httpx.request({
-                url: `http://pbl4configlog.dev.web.nd/v0.1/logs?configAppId=${configAppID}&configId=${configID}&$offset=${pno * pageSize - pageSize}&$limit=${pageSize}`,
+                url: `${domain}/v0.1/logs?configAppId=${configAppID}&configId=${configID}&$offset=${pno * pageSize - pageSize}&$limit=${pageSize}`,
                 method: "GET",
                 headers: {},
                 success: function(response) {
@@ -207,12 +208,13 @@ export default class ConfigLogs {
 
     /**
 * 保存日志
+* @param  {[type]} domain     域名
 * @param {number} configAppID 配置应用 ID
 * @param {number} configID 配置 ID
 * @param {string} diff 比对内容
 * @return
 */
-    saveLog(configAppID, configID, diff, userId) {
+    saveLog(domain,configAppID, configID, diff, userId) {
         swal({
             title: "保存比对日志",
             text: "",
@@ -229,7 +231,7 @@ export default class ConfigLogs {
                 return false
             }
             httpx.request({
-                url: "http://pbl4configlog.dev.web.nd/v0.1/logs",
+                url: domain + "/v0.1/logs",
                 method: "POST",
                 headers: {},
                 contentType: "application/json",

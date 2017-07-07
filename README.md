@@ -49,23 +49,30 @@ var del = configLogs.showDiff({
 
 /**
 * 显示日志  分页 在修改比对按钮旁边加一个查看修改日志按钮，点击触发
+* @param  {String} domain 服务端域名     
 * @param  {String} configAppID     配置应用的ID
 * @param  {String} configID        配置ID
 * @param  {Object}  mappingObj [数据字典] Object 若遗漏 显示key名
 * @return  null
 */
-configLogs.showLogs('ccc', 'ccc', {
+configLogs.showLogs(
+  'http://pbl4configlog.dev.web.nd',
+  'ccc',
+  'ccc',
+  {
       arrlist: '任务列表'
-  })
+  }
+)
 
   /**
 * 保存日志
+*  @param  {String} domain 服务端域名     
 * @param {String} configAppID 配置应用 ID
 * @param {String} configID 配置 ID
 * @param {[Object,..]} diff 比对内容
 * @return  null
 */
-configLogs.saveLog('ccc', 'ccc', del, 100013)
+configLogs.saveLog(  'http://pbl4configlog.dev.web.nd', 'ccc', 'ccc', del, 100013)
 
 ```
 
