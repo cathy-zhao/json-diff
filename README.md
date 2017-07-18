@@ -66,10 +66,12 @@ configLogs.showLogs(
 
   /**
 * 保存日志
-*  @param  {String} domain 服务端域名     
+* @param {String} domain 服务端域名     
 * @param {String} configAppID 配置应用 ID
 * @param {String} configID 配置 ID
 * @param {[Object,..]} diff 比对内容
+* @param {number} userId  保存人工号
+* @param {function} excute 执行脚本
 * @return  null
 */
 configLogs.saveLog(  'http://pbl4configlog.dev.web.nd', 'ccc', 'ccc', del, 100013)

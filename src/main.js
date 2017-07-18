@@ -212,9 +212,11 @@ export default class ConfigLogs {
 * @param {number} configAppID 配置应用 ID
 * @param {number} configID 配置 ID
 * @param {string} diff 比对内容
+* @param {number} userId  保存人工号
+* @param {function} excute 执行脚本
 * @return
 */
-    saveLog(domain,configAppID, configID, diff, userId) {
+    saveLog(domain,configAppID, configID, diff, userId, excute) {
         swal({
             title: "保存比对日志",
             text: "",
@@ -237,11 +239,20 @@ export default class ConfigLogs {
                 contentType: "application/json",
                 data: JSON.stringify({configAppId: configAppID, configId: configID, diff: diff, remark: inputValue, userId: userId}),
                 success: function(data) {
-                    swal("保存成功", '', "success");
+                    if(typeof excute === 'function'){
+                          excute()
+                    }else{
+                          swal("保存成功", '', "success");
+                    }
                 },
                 error: function(url, e) {
-                    let {message} = JSON.parse(e.srcElement.response)
-                    swal("出错啦！", message, "error");
+                  let message = ''
+                  if(e.srcElement.response){
+                    message = JSON.parse(e.srcElement.response)
+                  }else{
+                    message = '保存日志出错'
+                  }
+                  swal("出错啦！", message , "error");
                 }
             });
 
