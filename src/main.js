@@ -1,10 +1,10 @@
-import jsondiffpatch from 'jsondiffpatch'
+﻿import jsondiffpatch from 'jsondiffpatch'
 import formatters from './js/jsondiffpatch-formatters.min.js'
 import './css/html.css'
 import './css/annotated.css'
 //弹窗
-import swal from 'sweetalert'
-import './css/sweetalert.css'
+import swal from './js/sweetalert2.min.js'
+import './css/sweetalert2.css'
 //请求库
 import httpx from './js/httpx'
 
@@ -99,7 +99,7 @@ export default class ConfigLogs {
         footer.innerHTML = changeStr
         // 创建弹窗
         if( isShow ){
-          swal({title: "新的数据源：", text: "<div id='swal-text-holder' style='max-height: 650px; overflow: auto;'>1</div>", html: true})
+          swal({title: "新的数据源：", width: 750, html: "<div id='swal-text-holder' style='max-height: 650px; overflow: auto;'>1</div>"})
           // beautiful html diff
           document.getElementById('swal-text-holder').innerHTML = delta && changeStr
               ? formatters.html.format(delta, oldData)
@@ -119,7 +119,7 @@ export default class ConfigLogs {
 * @return {[type]}                 [description]
 */
     showLogs(domain,configAppID, configID, mappingObj) {
-        swal({title: "日志对比：", text: "<div id='table-list' style='max-height: 650px; overflow: auto;'></div>", html: true})
+        swal({title: "日志对比：", width: 750, html: "<div id='table-list' style='max-height: 650px; overflow: auto;'></div>"})
         var htmls = `<table id='js-table-data'  style="margin: 10px auto;"  border="1" cellspacing="0" cellpadding="0" width="100%" > </table >
          <table width='60%' align='center'>
             <tr>
@@ -219,44 +219,45 @@ export default class ConfigLogs {
     saveLog(domain,configAppID, configID, diff, userId, excute) {
         swal({
             title: "保存比对日志",
-            text: "",
-            type: "input",
-            showCancelButton: true,
-            closeOnConfirm: false,
+            input: "text",
+            showCancelButton: false,
             showLoaderOnConfirm: true,
-            inputPlaceholder: "填写备注"
-        }, function(inputValue) {
-            if (inputValue === false)
-                return false;
-            if (inputValue === "") {
-                swal.showInputError("备注不能为空哦!");
-                return false
-            }
-            httpx.request({
-                url: domain + "/v0.1/logs",
-                method: "POST",
-                headers: {},
-                contentType: "application/json",
-                data: JSON.stringify({configAppId: configAppID, configId: configID, diff: diff, remark: inputValue, userId: userId}),
-                success: function(data) {
-                    if(typeof excute === 'function'){
-                          excute()
-                    }else{
-                          swal("保存成功", '', "success");
-                    }
-                },
-                error: function(url, e) {
-                  let message = ''
-                  if(e.srcElement.response){
-                    message = JSON.parse(e.srcElement.response)
-                  }else{
-                    message = '保存日志出错'
+            inputPlaceholder: "填写备注",
+            preConfirm: (inputValue) => {
+              return new Promise( (resolve, reject) => {
+                  if (inputValue && inputValue.length > 0) {
+                     resolve()
+                  } else {
+                     reject('备注不能为空哦!')
                   }
-                  swal("出错啦！", message , "error");
+              })
+            },
+            allowOutsideClick: false
+        }).then( (inputValue) => {
+          httpx.request({
+              url: domain + "/v0.1/logs",
+              method: "POST",
+              headers: {},
+              contentType: "application/json",
+              data: JSON.stringify({configAppId: configAppID, configId: configID, diff: diff, remark: inputValue, userId: userId}),
+              success: (data) => {
+                  if(typeof excute === 'function'){
+                          swal({title: "保存成功", type: "info", allowOutsideClick: false}).then( ()=>{excute()} )
+                  }else{
+                         swal({title: "保存成功", type: "info", allowOutsideClick: false})
+                  }
+              },
+              error: (url, e) => {
+                let message = ''
+                if(e.srcElement.response){
+                  message = JSON.parse(e.srcElement.response)
+                }else{
+                  message = '保存日志出错'
                 }
-            });
-
-        });
+                 swal({title: "保存成功",  text: message, type: "error", allowOutsideClick: false})
+              }
+          });
+        })
 
     }
 

@@ -14,9 +14,9 @@
     <button type="button" name="button" id='btn2' onclick="b2()">show logs </button>
     <button type="button" name="button" id='btn3' onclick="b3()">save logs </button>
 </body>
-<script src="bundle.min.js"></script>
+<script src="index.umd.js"></script>
 <script type="text/javascript">
-    var configLogs = new configLogs();
+    var configLogs = new jsonDiff();
     function b1() {
         var del = configLogs.showDiff({
             a: 123,
@@ -55,7 +55,7 @@
     }
 
     function b2() {
-        configLogs.showLogs('ccc', 'ccc', {
+        configLogs.showLogs('http://pbl4configlog.dev.web.nd','ccc', 'ccc', {
             arrlist: '任务列表'
         })
     }
@@ -63,7 +63,10 @@
     function b3() {
         var del = b1()
         var f1 = function() {
-            window.location.href = 'aaaaaaaa.com'
+            console.log(1)
+            window.history.pushState(null, 'tasks/list')
+            // window.location.href = 'aaaaa'
+            console.log(2)
         }
         configLogs.saveLog('http://pbl4configlog.dev.web.nd', 'ccc', 'ccc', del, 100013, f1)
     }

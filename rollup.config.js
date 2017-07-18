@@ -1,4 +1,4 @@
-import uglify from 'rollup-plugin-uglify'
+﻿import uglify from 'rollup-plugin-uglify'
 import babel from 'rollup-plugin-babel';
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs';
@@ -13,8 +13,8 @@ import cssnano from 'cssnano';
 export default {
     entry : 'src/main.js',
     format : 'umd',
-    moduleName: 'configLogs',   //  cyn add + umd或iife模式下，若入口文件含 export，必须加上该属性  babelrc最好配上module false
-    dest : 'dist/bundle.min.js',
+    moduleName: 'jsonDiff',   //  cyn add + umd或iife模式下，若入口文件含 export，必须加上该属性  babelrc最好配上module false
+    dest : 'dist/index.umd.js',
     sourceMap : true,
     plugins : [
         postcss({ // css 要先导入 either babel plugin error
