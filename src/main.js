@@ -1,4 +1,4 @@
-﻿import jsondiffpatch from 'jsondiffpatch'
+import jsondiffpatch from 'jsondiffpatch'
 import formatters from './js/jsondiffpatch-formatters.min.js'
 import './css/html.css'
 import './css/annotated.css'
@@ -99,7 +99,7 @@ export default class ConfigLogs {
         footer.innerHTML = changeStr
         // 创建弹窗
         if( isShow ){
-          swal({title: "新的数据源：", width: 750, html: "<div id='swal-text-holder' style='max-height: 650px; overflow: auto;'>1</div>"})
+          swal({title: "新的数据源：", confirmButtonText:'关闭', width: 750, html: "<div id='swal-text-holder' style='max-height: 650px; overflow: auto;'>1</div>"})
           // beautiful html diff
           document.getElementById('swal-text-holder').innerHTML = delta && changeStr
               ? formatters.html.format(delta, oldData)
@@ -119,7 +119,7 @@ export default class ConfigLogs {
 * @return {[type]}                 [description]
 */
     showLogs(domain,configAppID, configID, mappingObj) {
-        swal({title: "日志对比：", width: 750, html: "<div id='table-list' style='max-height: 650px; overflow: auto;'></div>"})
+        swal({title: "日志对比：",  confirmButtonText:'关闭', width: 950, html: "<div id='table-list' style='max-height: 650px; overflow: auto;'></div>"})
         var htmls = `<table id='js-table-data'  style="margin: 10px auto;"  border="1" cellspacing="0" cellpadding="0" width="100%" > </table >
          <table width='60%' align='center'>
             <tr>
@@ -164,10 +164,10 @@ export default class ConfigLogs {
                                 ? mappingObj[per.key]
                                 : per.key, per.old, per.new))
                             tableStr += `<tr>
-                          <td style="WORD-WRAP: break-word" width="15%">${ii.configAppId}</td>
-                          <td style="WORD-WRAP: break-word" width="15%">${ii.configId}</td>
-                          <td style="WORD-WRAP: break-word; text-align: left;list-style:none;padding: 5px"  >${st}</td>
-                          <td style="WORD-WRAP: break-word" width="15%">${ii.remark}</td>
+                          <td style="WORD-WRAP: break-word;word-break: break-all" width="10%">${ii.configAppId}</td>
+                          <td style="WORD-WRAP: break-word;word-break: break-all" width="10%">${ii.configId}</td>
+                          <td style="WORD-WRAP: break-word;;word-break: break-all; text-align: left;list-style:none;padding: 5px"  >${st}</td>
+                          <td style="WORD-WRAP: break-word;word-break: break-all" width="15%">${ii.remark}</td>
                         </tr>`
                         })
                     }
@@ -180,16 +180,16 @@ export default class ConfigLogs {
                     let tempStr = "共【" + total + "】条记录,分【" + totalPage + "】页,当前第【" + pno + "】页 ";
                     //判断页数>1时
                     if (pno > 1) {
-                        tempStr += `<a style='text-decoration: none;' href=# onClick=Page(1,${pageSize})>首页 </a>`;
-                        tempStr += `<a style='text-decoration: none;' href=# onClick=Page(${pno - 1},${pageSize})><上一页 </a>`
+                        tempStr += `<a style='text-decoration: none;' onClick=Page(1,${pageSize})>首页 </a>`;
+                        tempStr += `<a style='text-decoration: none;' onClick=Page(${pno - 1},${pageSize})><上一页 </a>`
                     } else {
                         tempStr += "首页";
                         tempStr += "<上一页";
                     }
                     //判断页数<总页数时
                     if (pno < totalPage) {
-                        tempStr += `<a style='text-decoration: none;' href=# onClick=Page(${pno + 1},${pageSize})> 下一页></a>`
-                        tempStr += `<a style='text-decoration: none;' href=# onClick=Page(${totalPage},${pageSize})> 尾页</a>`
+                        tempStr += `<a style='text-decoration: none;' onClick=Page(${pno + 1},${pageSize})> 下一页></a>`
+                        tempStr += `<a style='text-decoration: none;' onClick=Page(${totalPage},${pageSize})> 尾页</a>`
                     } else {
                         tempStr += "下一页>";
                         tempStr += "尾页";
@@ -219,14 +219,16 @@ export default class ConfigLogs {
     saveLog(domain,configAppID, configID, diff, userId, excute) {
         swal({
             title: "保存比对日志",
-            input: "text",
-            showCancelButton: false,
+            input: "textarea",
+            showCancelButton: true,
+            confirmButtonText:'确定',
+            cancelButtonText:'取消',
             showLoaderOnConfirm: true,
             inputPlaceholder: "填写备注",
             preConfirm: (inputValue) => {
               return new Promise( (resolve, reject) => {
                   if (inputValue && inputValue.length > 0) {
-                     resolve()
+                     inputValue.length > 50  ?  reject('字符数不大于50个哦!') : resolve()
                   } else {
                      reject('备注不能为空哦!')
                   }
@@ -242,9 +244,9 @@ export default class ConfigLogs {
               data: JSON.stringify({configAppId: configAppID, configId: configID, diff: diff, remark: inputValue, userId: userId}),
               success: (data) => {
                   if(typeof excute === 'function'){
-                          swal({title: "保存成功", type: "info", allowOutsideClick: false}).then( ()=>{excute()} )
+                          swal({title: "保存成功", type: "info", confirmButtonText:'知道了', allowOutsideClick: false}).then( ()=>{excute()} )
                   }else{
-                         swal({title: "保存成功", type: "info", allowOutsideClick: false})
+                         swal({title: "保存成功", type: "info", confirmButtonText:'知道了', allowOutsideClick: false})
                   }
               },
               error: (url, e) => {
